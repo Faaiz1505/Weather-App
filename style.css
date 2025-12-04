@@ -1,0 +1,198 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: linear-gradient(rgba(79, 172, 254, 0.6), rgba(0, 242, 254, 0.6)),
+    url("./images/bg.jpg");
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-position: center;
+  background-size: cover;
+}
+
+.weather-container {
+  position: relative; /* required for overlay */
+  width: 400px;
+  padding: 30px 20px;
+  border-radius: 20px;
+  overflow: hidden; /* hides overlay spill */
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+/* 🔥 Transparent Blur Overlay */
+.weather-container::before {
+  content: "";
+  position: absolute;
+  inset: 0; /* fills the card */
+  background: rgba(255, 255, 255, 0.025); /* transparency level */
+  backdrop-filter: blur(5px); /* blur strength */
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 0; /* behind the text */
+}
+
+/* Make all text show above the blur */
+.weather-container * {
+  position: relative;
+  z-index: 1;
+}
+
+h1 {
+  margin-bottom: 20px;
+  font-size: 26px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.search-box {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  border-radius: 50px;
+  background-color: rgba(255, 255, 255, 0.7);
+  color: #333;
+  font-size: 14px;
+  border: none;
+  outline: none;
+}
+
+input[type="text"]::placeholder {
+  color: #888;
+  font-style: italic;
+}
+
+input:hover {
+  transform: translateY(-2px);
+}
+
+input.error::placeholder {
+  color: red;
+  font-style: italic;
+}
+
+.search-box button {
+  width: auto;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 50px;
+  background-color: #009dff;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 540;
+  transition: 0.3s;
+  border: 1px solid #ffffff;
+}
+
+.search-box button:hover {
+  background-color: #007acc;
+  transform: translateY(-2px);
+  border: 1px solid #ffffff;
+}
+
+#weather-info {
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+.city-name {
+  margin-top: 20px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 24px;
+}
+
+.temp {
+  font-size: 47px;
+  font-weight: bold;
+  color: #ffffff;
+  margin: 8px 0;
+}
+
+.weather {
+  color: #003160;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1.8;
+}
+
+.weather-icon img {
+  width: 100px;
+  height: 100px;
+}
+
+.details {
+  color: #e7e7e7;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1.8;
+}
+
+.details span {
+  color: #000;
+  font-weight: 600;
+}
+
+#error-message {
+  color: #e91405;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 20px;
+  font-style: italic;
+}
+
+/* Smooth Animate */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 400px) {
+  .weather-container {
+    width: 90%;
+    padding: 20px 15px;
+  }
+
+  input[type="text"] {
+    width: 75%;
+    font-size: 12px;
+  }
+
+  .search-box button {
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+
+  .temp {
+    font-size: 36px;
+  }
+
+  .weather-icon img {
+    width: 80px;
+    height: 80px;
+  }
+}

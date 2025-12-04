@@ -1,43 +1,48 @@
 document.addEventListener("DOMContentLoaded", function () {
   const cityInput = document.getElementById("city-input");
-  const getWeatherBtn = document.getElementById("get-weather-btn");
+  const searchBtn = document.getElementById("search-btn");
   const weatherInfo = document.getElementById("weather-info");
-  const cityNameDisplay = document.getElementById("city-name");
-  const temperatureDisplay = document.getElementById("temperature");
-  const descriptionDisplay = document.getElementById("description");
-  const errorMessage = document.getElementById("error-message");
+  const cityName = document.getElementById("city-name");
+  const temperature = document.getElementById("temperature");
+  const description = document.getElementById("description");
+  const weatherIcon = document.getElementById("weather-icon");
+  const humidity = document.getElementById("humidity");
+  const errorMsg = document.getElementById("error-message");
+  const Api_Key = "3d416c00c72f18c18674efa8ea284810";
 
-  const API_KEY = "3d416c00c72f18c18674efa8ea284810"; // environment variables
+  cityInput.addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      searchBtn.click();
+    }
+  });
 
-  getWeatherBtn.addEventListener("click", async function () {
+  searchBtn.addEventListener("click", async function () {
     const city = cityInput.value.trim();
+    if (city === "") {
+      cityInput.classList.add("error");
+      cityInput.value = "";
+      cityInput.placeholder = "Please enter valid city name!";
+      setTimeout(() => {
+        cityInput.classList.remove("error");
+        cityInput.placeholder = "Enter city name...";
+      }, 2000);
+      return;
+    }
     if (!city) return;
     cityInput.value = "";
 
-    // if u're making a web request u must remember dis:
-    // it may throw and error
-    // server/database is always in another continent.
-
-    // so whenever u're making a web request, try to wrap it in a safe zone
-
     try {
       const weatherData = await fetchWeatherData(city);
-      displayweatherdata(weatherData);
+      displayWeatherData(weatherData);
     } catch (error) {
       showError();
     }
   });
-
   async function fetchWeatherData(city) {
-    // gets the data
-
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`;
-
+    // get weather data from API
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${Api_Key}`;
     const response = await fetch(url);
-
-    console.log(typeof response);
-    console.log("RESPONSE", response);
-
     if (!response.ok) {
       throw new Error("City not found");
     }
@@ -45,20 +50,23 @@ document.addEventListener("DOMContentLoaded", function () {
     return data;
   }
 
-  function displayweatherdata(data) {
+  function displayWeatherData(data) {
     console.log(data);
-    const { name, main, weather } = data;
-    cityNameDisplay.textContent = name;
-    temperatureDisplay.textContent = `Temperature: ${main.temp}`;
-    descriptionDisplay.textContent = `Weather: ${weather[0].description}`;
+    const { name, main, weather, wind } = data;
+    cityName.textContent = name;
+    temperature.textContent = ` ${main.temp} °C`;
+    description.textContent = `Weather: ${weather[0].description}`;
+    weatherIcon.innerHTML = `<img src="https://openweathermap.org/img/wn/${weather[0].icon}.png" alt="${weather[0].description}" />`;
+    humidity.textContent = `Humidity: ${main.humidity}%`;
 
-    // unlock the display
     weatherInfo.classList.remove("hidden");
-    errorMessage.classList.add("hidden");
+    errorMsg.classList.add("hidden");
   }
-
   function showError() {
     weatherInfo.classList.add("hidden");
-    errorMessage.classList.remove("hidden");
+    setTimeout(() => {
+      errorMsg.classList.add("hidden");
+    }, 3000);
+    errorMsg.classList.remove("hidden");
   }
 });
